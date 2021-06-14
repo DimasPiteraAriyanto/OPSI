@@ -5,6 +5,5 @@ $kode = $_GET['kodepj'];
 ?>
 
 <script type="text/javascript">
-					alert("Pesanan Berhasil di Hapus");
 					window.location.href="?page=penjualan&kodepj=<?php echo $kode;?>";
 </script> 

@@ -1,4 +1,6 @@
+
 <?php
+   
    $kode = $_GET['kodepj'];
    if(isset($_POST['simpan'])){
      
@@ -49,13 +51,10 @@
      }
     
    ?>
-<div class="card" >
-   <div class="header">
-      <table style="width:100%">
-      <td style="text-align:left"><h2>Data barang</h2> <a href="#" data-toggle="modal" data-target="#largeModal" class="pull-right"><small>Cari Produk!</small></a></td>
 
-      </table>
-   </div>
+
+
+<div class="card" >
    <div class="body">
       <div class="row">
          <form method="POST">
@@ -63,9 +62,15 @@
                <div class="form-group">
                   <input type="text" name="kode" value="<?php echo $kode; ?>" class="form-control" readonly="" />
                </div>
+               
+               
+
                <div class="form-group">
-                  <label>Kode Barcode</label>
-                  <input type="text" name="kode_barcode"  class="form-control" autofocus="" onkeyup="hitung()" />
+               <label>Kode Barcode</label></br>
+               <select id='selUser' style='width: 200px;' onchange="myFunction(event)">
+                     <option value='0'>- Search Menu -</option>
+               </select>
+               <input id="myText" type="text" name="kode_barcode"  class="form-control" autofocus="" onclick="hitung()" />
                </div>
                <div class="col-md-50 col-xs-12 text-left">      
                <table class="table table-striped"><tr>
@@ -111,59 +116,7 @@
                
                </div> -->
 
-               <!--Modal Search-->
-               <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title" id="myModalLabel">Data Barang</h3>
-            </div>
-                <div class="modal-body" style="overflow:scroll;height:500px;">
-
-                  <table class="table table-bordered table-condensed" style="font-size:11px;" id="mydata">
-                    <thead>
-                        <tr>
-                            <th style="text-align:center;width:40px;">No</th>
-                            <th style="width:120px;">Kode Barcode</th>
-                            <th style="width:240px;">Nama Menu</th>
-                            <th>Harga</th>
-                            <th style="width:100px;">Ukuran</th>
-                            <th>Jenis Menu</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php 
-                       $no = 1;
-
-                       $sql = $koneksi->query("SELECT DISTINCT * from tb_barang ORDER BY nama_barang");
-
-                       while ($data = $sql->fetch_assoc()) {
-                     ?>
-                            <tr>
-                                            <td><?php echo $no++;?></td>
-                                            <td><?php echo $data['kode_barcode']?></td>
-                                            <td><?php echo $data['nama_barang']?></td>
-                                            <td><?php echo "Rp. ".number_format($data['harga'])?></td>
-                                            <td><?php echo $data['ukuran']?></td>
-                                            <td><?php echo $data['jenisMenu']?></td>
-                                        </tr>              
-                            </td>
-                        </tr>
-                    <?php }?>
-                    </tbody>
-                </table>          
-
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Tutup</button>
-                    
-                </div>
-            </div>
-            </div>
-        </div>
-               <!--Modal END-->
+               
 
 
       </div>
@@ -214,7 +167,7 @@
                   <td><?php echo $data['diskon']."%"?></td>
                   <td><?php echo "Rp. ".number_format($data['total'])?></td>
                   <td>
-                     <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data ini !')" href="?kodepj=<?=$_GET['kodepj']?>&page=penjualan&aksi=delete&id=<?php echo $data['id']?>" class="btn btn-danger" >Delete</a>
+                     <a href="?kodepj=<?=$_GET['kodepj']?>&page=penjualan&aksi=delete&id=<?php echo $data['id']?>" class="btn btn-danger" >Delete</a>
                   </td>
                </tr>
                <?php 
@@ -277,8 +230,38 @@
 
    </form>        
 </div>
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+<!--harus deklarasi ulang ajax dan select2 untuk memanggil packagenya-->
 <script type="text/javascript">
+   $(document).ready(function(){
 
+$("#selUser").select2({
+    ajax: {
+        url: "page/penjualan/getDataSelect2.php", //karena tempatnya ada di page penjualan lalu phpnya maka jika deklarasi langsung tidak bisa harus ada page/penjualan/getDataSelect2.php
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+            return {
+                searchTerm: params.term // search term
+            };
+        },
+        processResults: function (response) {
+            return {
+                results: response
+            };
+        },
+        
+        cache: true
+    }
+});
+});
+
+function myFunction(e) {
+    document.getElementById("myText").value = e.target.value
+}
    var detail_barang = null;
    function hitung(){
      var kode_barcode = document.getElementsByName("kode_barcode")[0].value;
@@ -332,12 +315,13 @@
      
      if (kembali < 0){
      //alert("UANG KURANG");
-     document.getElementById("kembali").value = 0;
-     
-   }else {
+     document.getElementById("kembali").value = bayar-total_bayar;
+     } else {
      document.getElementById("kembali").value = kembali;
    }
    }
    document.getElementById("bayar").addEventListener("keyup", hitungTotal)
    
+
+
 </script>

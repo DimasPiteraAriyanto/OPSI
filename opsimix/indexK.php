@@ -176,6 +176,26 @@ if ($_SESSION['kasir']) {
                                     <span>Penjualan</span>
                                 </a>
                     </li>
+                    <li>
+                                <a href="page/penjualan/list_penjualan.php">
+                                    <i class="material-icons">production_quantity_limits</i>
+                                    <span>Daftar Pesanan Pending</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="page/penjualan/view_wait.php">
+                                    <i class="material-icons">list</i>
+                                    <span>Daftar Status Tunggu Pesanan</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="page/penjualan/view_stats.php">
+                                    <i class="material-icons">hourglass_bottom</i>
+                                    <span>Accept Pesanan</span>
+                                </a>
+                            </li>
                         <!--<ul class="ml-menu">
 
                             <li>
@@ -271,6 +291,13 @@ if ($_SESSION['kasir']) {
 
                         if ($aksi == "list") {
                 			include "page/penjualan/list_penjualan.php";
+                		}
+                        if ($aksi == "listStat") {
+                			include "page/penjualan/view_stats.php";
+                		}
+
+                        if ($aksi == "listWait") {
+                			include "page/penjualan/view_wait.php";
                 		}
                         
                 	}

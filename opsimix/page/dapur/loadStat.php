@@ -5,23 +5,21 @@
 <meta charset="utf-8">
 </head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-
 <body>
 
 
 <?php
 
 include('koneksi.php');
-$kode = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM tb_penjualan_detail WHERE status IS NULL
-                                        GROUP BY id ASC "));
+$kode = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM tb_penjualan_detail WHERE status=1 "));
 $kode_pj = $kode['kode_penjualan'];
 
 ?>
-<h3>KODE PENJUALAN NO : <?php echo $kode_pj; ?></h3> </br>
+
 <table id="example" class="table table-striped table-bordered" style="width:100%">
 <thead>
-<tr><?php 
+<tr>
+<?php 
     $tanggal = mktime(date('m'), date("d"), date('Y'));
     echo "Tanggal : <b> " . date("d-m-Y", $tanggal ) . "</b>";
     date_default_timezone_set("Asia/Jakarta");
@@ -39,19 +37,23 @@ $kode_pj = $kode['kode_penjualan'];
     }
  ?>
             <td>No</td>
+            <td>Kode Sturk</td>
             <td>Nama Menu</td>
-            <td>Jumlah Menu</td>
-            <td>Ukuran</td>
-            <td></td>
+            <td>Aksi</td>
  </tr>
  </thead>
 
+        <!--
+            join 3 table
+            select s.name "Student", c.name "Course"
+            from student s, bridge b, course c
+            where b.sid = s.sid and b.cid = c.cid -->
+
         <?php                                
             $no = 1;
-            $query = "SELECT * from tb_penjualan, tb_penjualan_detail, tb_barang
-            where status IS NULL and tb_penjualan.kode_penjualan = tb_penjualan_detail.kode_penjualan
-            and tb_penjualan_detail.kode_barcode=tb_barang.kode_barcode
-            and tb_penjualan.kode_penjualan='$kode_pj' ";
+            $query = "SELECT * FROM tb_penjualan p 
+            left join tb_penjualan_detail d on p.kode_penjualan=d.kode_penjualan 
+            left join tb_barang b on b.kode_barcode=d.kode_barcode WHERE status=1";
              
             $dewan1 = $con->prepare($query);
             $dewan1->execute();
@@ -60,24 +62,21 @@ $kode_pj = $kode['kode_penjualan'];
             if ($res1->num_rows > 0) {
                 while ($row = $res1->fetch_assoc()) {
                     $kodep = $row['kode_penjualan'];
-                    $jumlah = $row['jumlah'];
                     $namaMenu = $row['nama_barang'];
-                    $id = $row['id'];
                     $status = $row['status'];
-                    $ukuran = $row['ukuran'];
+                    $id = $row['id'];
         ?>
 
 <tbody>
 <tr>
         <div id="rene">
                 <td><?php echo $no++; ?></td>
-                <td><?php echo $namaMenu; ?></td>
-                <td><?php echo $jumlah; ?></td> 
-                <td><?php echo $ukuran; ?></td>  
+                <td><?php echo $kodep; ?></td>
+                <td><?php echo $namaMenu; ?></td> 
                 <td> 
                 
                 <a href="javascript:void(0)" onClick="updateId('<?= $id ?>')"><button type="button" class="btn btn-success" class="preference" id="check" value="<?= $status ?>"/></a>
-                <p class="text-success"><?=$status?></p>
+                <p class="text-success"></p>
                 
                 </td>                                          
         <?php }} ?>
@@ -85,19 +84,17 @@ $kode_pj = $kode['kode_penjualan'];
 </tbody>
 </table>
 
-          
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+         
 </body>
 </html>
 
 <script>
 
-$(document).ready(function(){
-setInterval(function(){
-      $("#rene").load(window.location.href + "#rene" );
-}, 10000);
-});
 
-/*button*/
+
+/*button
 var buttons = document.querySelectorAll('button');
 
 buttons.forEach(function(button) {
@@ -106,7 +103,7 @@ buttons.forEach(function(button) {
   } else {
     button.style.display = "none"
   }
-});
+});*/
 
    /* checked after refresh 
    $(function(){
@@ -127,7 +124,7 @@ buttons.forEach(function(button) {
             alert(xmlhttp.responseText);
         }
         };
-        xmlhttp.open("GET", "getPL.php?id=" +id, true);
+        xmlhttp.open("GET", "getStat.php?id=" +id, true);
         xmlhttp.send();
     }
 

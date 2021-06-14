@@ -1,25 +1,25 @@
 <?php
 
-date_default_timezone_set('Asia/Jakarta');
-$date    = date('Y-m-d');
+
 
     $sql= $koneksi->query("SELECT * from tb_barang");
     while ($tampil = $sql->fetch_assoc()) {
         $jumlah_barang = $sql->num_rows;
 
-    $sql1= $koneksi->query("SELECT * from tb_penjualan_detail WHERE status is null ");
+    $sql1= $koneksi->query("SELECT * from tb_penjualan_detail WHERE status IS NULL");
     while ($tampil1 = $sql1->fetch_assoc()) {
     $jumlah_pending = $sql1->num_rows;
     }}
 
-    $sql2= $koneksi->query("SELECT SUM(total) as profit FROM  tb_penjualan p left join tb_penjualan_detail d on p.kode_penjualan=d.kode_penjualan WHERE tgl_penjualan='$date' ");
+
+    $date    = date('Y-m-d');
+    $sql2= $koneksi->query("SELECT  SUM(bayar - kembali) as profit FROM  tb_penjualan p left join tb_penjualan_detail d on p.kode_penjualan=d.kode_penjualan WHERE tgl_penjualan='$date' ");
     while ($data = $sql2->fetch_assoc()) {
     $profit = $data['profit'];
-
     
     
-    $bulan       = mysqli_query($koneksi, "SELECT DATE_FORMAT(tgl_penjualan, '%W') as bulan FROM tb_penjualan group by tgl_penjualan DESC LIMIT 5");
-    $penghasilan = mysqli_query($koneksi, "SELECT COUNT(kode_penjualan) jumlah from tb_penjualan group by tgl_penjualan DESC LIMIT 5");
+    $bulan       = mysqli_query($koneksi, "SELECT DATE_FORMAT(tgl_penjualan, '%W') as bulan FROM tb_penjualan group by tgl_penjualan");
+    $penghasilan = mysqli_query($koneksi, "SELECT COUNT(kode_penjualan) jumlah from tb_penjualan group by tgl_penjualan");
     
     ?>
 
@@ -43,7 +43,7 @@ $date    = date('Y-m-d');
                             <a href="?page=barang"><i class="material-icons">menu_book</i></a>
                         </div>
                         <div class="content">
-                            <div class="text">Data Barang</div>
+                            <div class="text">Jumlah Menu</div>
                             <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"><?= $jumlah_barang ?></div>
                         </div>
                     </div>
@@ -51,11 +51,11 @@ $date    = date('Y-m-d');
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-cyan hover-expand-effect">
                         <div class="icon">
-                        <a href="page/penjualan/list_penjualan.php"><i class="material-icons">production_quantity_limits</i></a>
+                        <a href="page/dapur/view_dapur.php"><i class="material-icons">production_quantity_limits</i></a>
                         </div>
                         <div class="content">
                             <div class="text">Jumlah Pesanan Pending</div>
-                            <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20"><?php if ($jumlah_pending !== 'NULL'){
+                            <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20"><?php if ($jumlah_pending < 1){
                                                                                                                                 echo "0";
                                                                                                                                 }else echo $jumlah_pending ?></div>
                         </div>

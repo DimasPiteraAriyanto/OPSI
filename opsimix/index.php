@@ -15,7 +15,16 @@ if ($_SESSION['owner']) {
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Penjualan Barang</title>
-  
+    
+    
+    <!-- select2 css -->
+    <link href='css/select2.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- select2 css -->
+    <link href='css/select2.min.css' rel='stylesheet' type='text/css'>
+
+    
+
     <!-- Favicon-->
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
 
@@ -43,18 +52,17 @@ if ($_SESSION['owner']) {
 
 
     <!-- CDN chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css" integrity="sha512-C7hOmCgGzihKXzyPU/z4nv97W0d9bv4ALuuEbSf6hm93myico9qa0hv4dODThvCsqQUmKmLcJmlpRmCaApr83g==" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js" integrity="sha512-zO8oeHCxetPn1Hd9PdDleg5Tw1bAaP0YmNvPY8CwcRyUk7d7/+nyElmFrB6f7vg4f7Fv4sui1mcep8RIEShczg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css" integrity="sha512-C7hOmCgGzihKXzyPU/z4nv97W0d9bv4ALuuEbSf6hm93myico9qa0hv4dODThvCsqQUmKmLcJmlpRmCaApr83g==" crossorigin="anonymous"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" integrity="sha512-hZf9Qhp3rlDJBvAKvmiG+goaaKRZA6LKUO35oK6EsM0/kjPK32Yw7URqrq3Q+Nvbbt8Usss+IekL7CRn83dYmw==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
-
 </head>
 
 <body class="theme-brown">
-    <script src="js/axios.min.js"></script>
+
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -190,12 +198,28 @@ if ($_SESSION['owner']) {
                             </li> 
 
                             <li>
-                                <a href="page/penjualan/list_penjualan.php">
+                                <a href="page/dapur/view_dapur.php">
                                     <i class="material-icons">production_quantity_limits</i>
                                     <span>Daftar Pesanan Pending</span>
                                 </a>
                             </li>
 
+                            <li>
+                                <a href="page/dapur/view_wait.php">
+                                    <i class="material-icons">list</i>
+                                    <span>Daftar Status Tunggu Pesanan</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="page/dapur/view_stats.php">
+                                    <i class="material-icons">hourglass_bottom</i>
+                                    <span>Accept Pesanan</span>
+                                </a>
+                            </li>
+<span class="material-icons">
+
+</span>
 
                         </ul>
                     </li>
@@ -299,10 +323,7 @@ if ($_SESSION['owner']) {
                 		if ($aksi == "delete") {
                 			include "page/penjualan/delete.php";
                 		}
-
-                        if ($aksi == "list") {
-                			include "page/penjualan/list_penjualan.php";
-                		}
+                        
                         
                 	}
 
@@ -323,11 +344,7 @@ if ($_SESSION['owner']) {
                 		if ($aksi == "delete") {
                 			include "page/penjualan/delete.php";
                 		}
-
-                        if ($aksi == "list") {
-                			include "page/penjualan/list_penjualan.php";
-                		}
-                        
+                                              
                 	}
 
                 	if ($page == "user") {
@@ -369,6 +386,23 @@ if ($_SESSION['owner']) {
         </div>
     </section>
 
+    <!-- jQuery -->
+    <script src='js/jquery-3.4.1.min.js' type='text/javascript'></script>
+
+
+    <!-- select2 script -->
+    <script src='js/select2.min.js'></script>
+
+    <!-- Script -->
+	<script src='js/axios.min.js'></script> 
+
+    <!-- jQuery -->
+    <script src='js/jquery-3.0.0.js' type='text/javascript'></script>
+
+    <!-- select2 script -->
+    <script src='js/select2.min.js'></script>
+    <script src="js/axios.min.js"></script>
+
     <!-- Jquery Core Js -->
     <script src="plugins/jquery/jquery.min.js"></script>
 
@@ -402,6 +436,7 @@ if ($_SESSION['owner']) {
 
     <!-- Demo Js -->
     <script src="js/demo.js"></script>
+
 </body>
 
 </html>

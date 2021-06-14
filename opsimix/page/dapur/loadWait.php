@@ -5,18 +5,11 @@
 <meta charset="utf-8">
 </head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 
 <body>
 
 
-<?php
 
-include('koneksi.php');
-$kode = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM tb_penjualan_detail "));
-$kode_pj = $kode['kode_penjualan'];
-
-?>
 
 <table id="example" class="table table-striped table-bordered" style="width:100%">
 <thead>
@@ -40,7 +33,6 @@ $kode_pj = $kode['kode_penjualan'];
  ?>
             <td>No</td>
             <td>Kode Sturk</td>
-            <td>Nama Menu</td>
             <td>Status</td>
  </tr>
  </thead>
@@ -51,28 +43,29 @@ $kode_pj = $kode['kode_penjualan'];
             from student s, bridge b, course c
             where b.sid = s.sid and b.cid = c.cid -->
 
-        <?php                                
-            $no = 1;
-            $query = "SELECT * FROM tb_penjualan p 
-            left join tb_penjualan_detail d on p.kode_penjualan=d.kode_penjualan 
-            left join tb_barang b on b.kode_barcode=d.kode_barcode";
-             
-            $dewan1 = $con->prepare($query);
-            $dewan1->execute();
-            $res1 = $dewan1->get_result();
- 
-            if ($res1->num_rows > 0) {
-                while ($row = $res1->fetch_assoc()) {
-                    $kodep = $row['kode_penjualan'];
-                    $namaMenu = $row['nama_barang'];
-                    $status = $row['status'];
+<?php 
+require("../../koneksi.php");
+$kode = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM tb_penjualan"));
+$kode_pj = $kode['kode_penjualan'];
+?>
+<?php
+            $sql=$koneksi->query("SELECT * from tb_penjualan, tb_penjualan_detail, tb_barang
+            where tb_penjualan.kode_penjualan = tb_penjualan_detail.kode_penjualan
+            and tb_penjualan_detail.kode_barcode=tb_barang.kode_barcode
+            GROUP BY tb_penjualan.kode_penjualan ASC ");
+
+            $total_keseluruhan = 0;
+            $no=1;
+            while($tampil = mysqli_fetch_assoc($sql)){
+                    $kodep = $tampil['kode_penjualan'];
+                    $status = $tampil['status'];
                     $wait = "";
 
             if ($status == 0){
                 $wait = "Pesanan sedang dibuatkan";
             } else if ($status == 1){
                 $wait = "Pesanan sudah jadi";
-            }else{
+            } else if ($status == 2){
                 $wait = "Pesanan sedang diantarkan ke meja";
             }
 
@@ -83,24 +76,20 @@ $kode_pj = $kode['kode_penjualan'];
         <div id="rene">
                 <td><?php echo $no++; ?></td>
                 <td><?php echo $kodep; ?></td>
-                <td><?php echo $namaMenu; ?></td> 
                 <td><p class="text-success"><?= $wait ?></p></td>                                          
-        <?php }} ?>
+        <?php } ?>
         </div>
 </tbody>
 </table>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
           
 </body>
 </html>
 
 <script>
 
-$(document).ready(function(){
-setInterval(function(){
-      $("#rene").load(window.location.href + "#rene" );
-}, 3000);
-});
+
 
 /*button
 var buttons = document.querySelectorAll('button');
